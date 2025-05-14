@@ -52,7 +52,21 @@ void *arraylist_get(struct arraylist_t *list, uint32_t index) {}
 
 void arraylist_set(struct arraylist_t *list, uint32_t index, void *new_value) {}
 
-void *arraylist_remove(struct arraylist_t *list, uint32_t index) {}
+void *arraylist_remove(struct arraylist_t *list, uint32_t index) {
+  // TODO: edge cases
+
+  void *removed = list->data[index];
+
+  for (int i = index + 1; i <= list->size; i++) {
+    list->data[i - 1] = list->data[i];
+  }
+
+  list->data[list->size - 1] = NULL;
+
+  list->size--;
+
+  return removed;
+}
 
 uint32_t arraylist_size(struct arraylist_t *list) { return list->size; }
 
