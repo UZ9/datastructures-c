@@ -30,4 +30,6 @@ int arraylist_index_of(struct arraylist_t *list, void *item);
 
 int arraylist_is_empty(struct arraylist_t *list);
 
+void arraylist_destroy(struct arraylist_t *list);
+
 #endif // ARRAYLIST_H

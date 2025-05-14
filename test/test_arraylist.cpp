@@ -18,6 +18,14 @@ void make_items(void **arr, int count) {
   }
 }
 
+void clean_items(void **arr, int count) {
+  for (int i = 0; i < count; i++) {
+    // no heap allocatd items in dummy node, so just free
+    free(arr[i]);
+    arr[i] = NULL;
+  }
+}
+
 void print_item(void *item) { printf("%d ", ((DummyNode *)item)->val); }
 
 bool node_is_value(void *node, int value) {
@@ -28,12 +36,14 @@ TEST(ArrayList_Create_HasSizeZeroAfterCreation, Basic) {
   arraylist_t *list = arraylist_create(10);
 
   EXPECT_EQ(list->size, 0);
+  arraylist_destroy(list);
 }
 
 TEST(ArrayList_Create_HasCorrectCapacity, Basic) {
   arraylist_t *list = arraylist_create(10);
 
   EXPECT_EQ(list->capacity, 10);
+  arraylist_destroy(list);
 }
 
 ///////////////////////////////////////////
@@ -42,6 +52,7 @@ TEST(ArrayList_Size_HasSizeZeroAfterCreation, Basic) {
   arraylist_t *list = arraylist_create(10);
 
   EXPECT_EQ(arraylist_size(list), 0);
+  arraylist_destroy(list);
 }
 
 ///////////////////////////////////////////
@@ -50,6 +61,7 @@ TEST(ArrayList_IsEmpty_ShouldBeTrueAfterInitialization, Basic) {
   arraylist_t *list = arraylist_create(10);
 
   EXPECT_TRUE(arraylist_is_empty(list));
+  arraylist_destroy(list);
 }
 
 ///////////////////////////////////////////
@@ -76,6 +88,9 @@ TEST(ArrayList_Add_NoResize, Basic) {
   EXPECT_EQ(list->data[0], arr[0]);
   EXPECT_EQ(list->data[1], arr[1]);
   EXPECT_EQ(list->data[2], arr[2]);
+
+  clean_items(arr, 3);
+  arraylist_destroy(list);
 }
 
 TEST(ArrayList_Add_CanResize, Basic) {
@@ -100,6 +115,9 @@ TEST(ArrayList_Add_CanResize, Basic) {
   EXPECT_EQ(list->data[0], arr[0]);
   EXPECT_EQ(list->data[1], arr[1]);
   EXPECT_EQ(list->data[2], arr[2]);
+
+  clean_items(arr, 3);
+  arraylist_destroy(list);
 }
 
 TEST(ArrayList_Add_InMiddle, Basic) {
@@ -131,6 +149,8 @@ TEST(ArrayList_Add_InMiddle, Basic) {
   EXPECT_EQ(list->data[2], arr[1]);
 
   EXPECT_EQ(list->data[3], arr[2]);
+  clean_items(arr, 4);
+  arraylist_destroy(list);
 }
 
 TEST(ArrayList_Remove_InMiddle, Basic) {
@@ -161,6 +181,8 @@ TEST(ArrayList_Remove_InMiddle, Basic) {
   EXPECT_EQ(arr[1], removed);
   EXPECT_EQ(list->data[1], arr[2]);
   EXPECT_EQ(list->size, 2);
+  clean_items(arr, 4);
+  arraylist_destroy(list);
 }
 
 TEST(ArrayList_GetItem, Basic) {
@@ -189,6 +211,8 @@ TEST(ArrayList_GetItem, Basic) {
   EXPECT_EQ(list->data[0], arraylist_get(list, 0));
   EXPECT_EQ(list->data[1], arraylist_get(list, 1));
   EXPECT_EQ(list->data[2], arraylist_get(list, 2));
+  clean_items(arr, 4);
+  arraylist_destroy(list);
 }
 
 TEST(ArrayList_IndexOf_ReturnsNegativeOne_IfItemNotInList, Basic) {
@@ -207,6 +231,8 @@ TEST(ArrayList_IndexOf_ReturnsNegativeOne_IfItemNotInList, Basic) {
   EXPECT_EQ(arraylist_size(list), 3);
 
   EXPECT_EQ(arraylist_index_of(list, arr[3]), -1);
+  clean_items(arr, 4);
+  arraylist_destroy(list);
 }
 
 
@@ -226,6 +252,8 @@ TEST(ArrayList_IndexOf_ReturnsCorrectIndex_IfItemInList, Basic) {
   EXPECT_EQ(arraylist_size(list), 3);
 
   EXPECT_TRUE(arraylist_index_of(list, arr[1]));
+  clean_items(arr, 4);
+  arraylist_destroy(list);
 }
 
 
@@ -245,6 +273,8 @@ TEST(ArrayList_Contains_ReturnsNonZero_IfItemInList, Basic) {
   EXPECT_EQ(arraylist_size(list), 3);
 
   EXPECT_TRUE(arraylist_contains(list, arr[1]));
+  clean_items(arr, 4);
+  arraylist_destroy(list);
 }
 
 TEST(ArrayList_Contains_ReturnsZero_IfItemNotInList, Basic) {
@@ -263,6 +293,8 @@ TEST(ArrayList_Contains_ReturnsZero_IfItemNotInList, Basic) {
   EXPECT_EQ(arraylist_size(list), 3);
 
   EXPECT_FALSE(arraylist_contains(list, arr[3]));
+  clean_items(arr, 4);
+  arraylist_destroy(list);
 }
 
 TEST(ArrayList_Set_ReturnsOldValueWhenReplaced, Basic) {
@@ -282,6 +314,10 @@ TEST(ArrayList_Set_ReturnsOldValueWhenReplaced, Basic) {
 
   EXPECT_EQ(arraylist_set(list, 1, arr[3]), arr[1]);
   EXPECT_EQ(list->data[1], arr[3]);
+  clean_items(arr, 4);
+
+  arraylist_destroy(list);
+  
 }
 
 // TEST: arraylist empty after adding 1 then removing

@@ -103,3 +103,9 @@ int arraylist_index_of(struct arraylist_t *list, void *item) {
 }
 
 int arraylist_is_empty(struct arraylist_t *list) { return list->size == 0; }
+
+void arraylist_destroy(struct arraylist_t *list) {
+  // due to the void* potentially containing other pointers, we do NOT handle cleaning it up here.
+  free(list->data);
+  free(list);
+}
