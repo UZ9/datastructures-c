@@ -5,6 +5,7 @@ add_executable(
 
 target_link_libraries(
   run_tests
+  datastructures_c_lib
   GTest::gtest_main
 )
 

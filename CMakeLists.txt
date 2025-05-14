@@ -14,10 +14,11 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# header only library
-add_library(datastructures_c_lib INTERFACE)
+add_library(datastructures_c_lib 
+  src/arraylist.c
+)
 
-target_include_directories(datastructures_c_lib INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories(datastructures_c_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 ###################################################
 
