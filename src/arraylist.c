@@ -5,6 +5,11 @@
 #define LOG_ERROR(msg, ...) fprintf(stderr, msg "\n", ##__VA_ARGS__)
 
 struct arraylist_t *arraylist_create(uint32_t initial_capacity) {
+  if (initial_capacity == 0) {
+    LOG_ERROR("arraylist_create: cannot have initial capacity 0, must be > 0");
+    return NULL;
+  }
+
   struct arraylist_t *list =
       (struct arraylist_t *)calloc(1, sizeof(struct arraylist_t));
 
@@ -24,13 +29,6 @@ struct arraylist_t *arraylist_create(uint32_t initial_capacity) {
   }
 
   list->size = 0;
-
-  if (initial_capacity == 0) {
-    LOG_ERROR("arraylist_create: cannot have initial capacity 0, must be > 0");
-    free(list->data);
-    free(list);
-    return NULL;
-  }
 
   list->capacity = initial_capacity;
 
@@ -146,7 +144,7 @@ void *arraylist_remove(struct arraylist_t *list, uint32_t index) {
 
   void *removed = list->data[index];
 
-  for (int i = index + 1; i < list->size; i++) {
+  for (uint32_t i = index + 1; i < list->size; i++) {
     list->data[i - 1] = list->data[i];
   }
 
@@ -182,7 +180,7 @@ int arraylist_index_of(struct arraylist_t *list, void *item) {
   }
 
   // assuming strict comparison
-  for (int i = 0; i < list->size; i++) {
+  for (uint32_t i = 0; i < list->size; i++) {
     if (list->data[i] == item) {
       return i;
     }
