@@ -15,7 +15,16 @@ This repository uses [CMake](https://cmake.org/) as its build system:
 ```
 mkdir build 
 cd build 
-cmake .. 
-make 
-make install
+cmake ..
+
+cmake --build .
+```
+
+# Testing 
+
+After running the cmake configuration above:
+
+```
+cmake --build .
+ctest
 ```
