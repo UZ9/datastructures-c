@@ -5,7 +5,8 @@
 
 struct arraylist_t {
   uint32_t size;
-  void *data;
+  uint32_t capacity;
+  void **data;
 };
 
 struct arraylist_t *arraylist_create(uint32_t initial_size);
