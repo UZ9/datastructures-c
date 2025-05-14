@@ -4,7 +4,7 @@
 
 struct arraylist_t *arraylist_create(uint32_t initial_capacity) {
   struct arraylist_t *list =
-      (struct arraylist_t *)malloc(sizeof(struct arraylist_t));
+      (struct arraylist_t *)calloc(1, sizeof(struct arraylist_t));
 
   list->data = (void **)calloc(initial_capacity, sizeof(void *));
   list->size = 0;
@@ -37,7 +37,7 @@ void arraylist_add_at_index(struct arraylist_t *list, uint32_t index,
   } else {
     // shuffle everything over
 
-    for (int i = list->size + 1; i > index; i--) {
+    for (int i = list->size; i > index; i--) {
       printf("%d\n", i);
       list->data[i] = list->data[i - 1];
     }
@@ -73,7 +73,7 @@ void *arraylist_remove(struct arraylist_t *list, uint32_t index) {
 
   void *removed = list->data[index];
 
-  for (int i = index + 1; i <= list->size; i++) {
+  for (int i = index + 1; i < list->size; i++) {
     list->data[i - 1] = list->data[i];
   }
 
