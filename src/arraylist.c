@@ -48,9 +48,25 @@ void arraylist_add_at_index(struct arraylist_t *list, uint32_t index,
   }
 }
 
-void *arraylist_get(struct arraylist_t *list, uint32_t index) {}
+void *arraylist_get(struct arraylist_t *list, uint32_t index) {
+  if (index >= list->size || index < 0) {
+    return NULL;
+  }
 
-void arraylist_set(struct arraylist_t *list, uint32_t index, void *new_value) {}
+  return list->data[index];
+}
+
+void *arraylist_set(struct arraylist_t *list, uint32_t index, void *new_value) {
+  if (index >= list->size || index < 0) {
+    return NULL;
+  }
+
+  void* temp = list->data[index];
+
+  list->data[index] = new_value;
+
+  return temp;
+}
 
 void *arraylist_remove(struct arraylist_t *list, uint32_t index) {
   // TODO: edge cases
@@ -70,8 +86,20 @@ void *arraylist_remove(struct arraylist_t *list, uint32_t index) {
 
 uint32_t arraylist_size(struct arraylist_t *list) { return list->size; }
 
-int arraylist_contains(struct arraylist_t *list, void *item) {}
+int arraylist_contains(struct arraylist_t *list, void *item) {
+  return arraylist_index_of(list, item) != -1;
+}
 
-int arraylist_index_of(struct arraylist_t *list, void *item) {}
+int arraylist_index_of(struct arraylist_t *list, void *item) {
+
+  // assuming strict comparison
+  for (int i = 0; i < list->size; i++) {
+    if (list->data[i] == item) {
+      return i;
+    }
+  }
+
+  return -1;
+}
 
 int arraylist_is_empty(struct arraylist_t *list) { return list->size == 0; }

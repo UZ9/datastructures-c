@@ -18,7 +18,7 @@ void arraylist_add_at_index(struct arraylist_t *list, uint32_t index,
 
 void *arraylist_get(struct arraylist_t *list, uint32_t index);
 
-void arraylist_set(struct arraylist_t *list, uint32_t index, void *new_value);
+void *arraylist_set(struct arraylist_t *list, uint32_t index, void *new_value);
 
 void *arraylist_remove(struct arraylist_t *list, uint32_t index);
 

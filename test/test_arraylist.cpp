@@ -156,11 +156,132 @@ TEST(ArrayList_Remove_InMiddle, Basic) {
   EXPECT_EQ(list->data[1], arr[1]);
   EXPECT_EQ(list->data[2], arr[2]);
 
-  void* removed = arraylist_remove(list, 1);
+  void *removed = arraylist_remove(list, 1);
 
   EXPECT_EQ(arr[1], removed);
   EXPECT_EQ(list->data[1], arr[2]);
   EXPECT_EQ(list->size, 2);
+}
+
+TEST(ArrayList_GetItem, Basic) {
+  arraylist_t *list = arraylist_create(5);
+
+  void *arr[4];
+
+  auto a = &arr;
+
+  make_items(arr, 4);
+
+  EXPECT_TRUE(node_is_value(arr[0], 0));
+  EXPECT_TRUE(node_is_value(arr[1], 1));
+  EXPECT_TRUE(node_is_value(arr[2], 2));
+
+  arraylist_add(list, arr[0]);
+  arraylist_add(list, arr[1]);
+  arraylist_add(list, arr[2]);
+
+  EXPECT_EQ(arraylist_size(list), 3);
+
+  EXPECT_EQ(list->data[0], arr[0]);
+  EXPECT_EQ(list->data[1], arr[1]);
+  EXPECT_EQ(list->data[2], arr[2]);
+
+  EXPECT_EQ(list->data[0], arraylist_get(list, 0));
+  EXPECT_EQ(list->data[1], arraylist_get(list, 1));
+  EXPECT_EQ(list->data[2], arraylist_get(list, 2));
+}
+
+TEST(ArrayList_IndexOf_ReturnsNegativeOne_IfItemNotInList, Basic) {
+  arraylist_t *list = arraylist_create(5);
+
+  void *arr[4];
+
+  auto a = &arr;
+
+  make_items(arr, 4);
+
+  arraylist_add(list, arr[0]);
+  arraylist_add(list, arr[1]);
+  arraylist_add(list, arr[2]);
+
+  EXPECT_EQ(arraylist_size(list), 3);
+
+  EXPECT_EQ(arraylist_index_of(list, arr[3]), -1);
+}
+
+
+TEST(ArrayList_IndexOf_ReturnsCorrectIndex_IfItemInList, Basic) {
+  arraylist_t *list = arraylist_create(5);
+
+  void *arr[4];
+
+  auto a = &arr;
+
+  make_items(arr, 4);
+
+  arraylist_add(list, arr[0]);
+  arraylist_add(list, arr[1]);
+  arraylist_add(list, arr[2]);
+
+  EXPECT_EQ(arraylist_size(list), 3);
+
+  EXPECT_TRUE(arraylist_index_of(list, arr[1]));
+}
+
+
+TEST(ArrayList_Contains_ReturnsNonZero_IfItemInList, Basic) {
+  arraylist_t *list = arraylist_create(5);
+
+  void *arr[4];
+
+  auto a = &arr;
+
+  make_items(arr, 4);
+
+  arraylist_add(list, arr[0]);
+  arraylist_add(list, arr[1]);
+  arraylist_add(list, arr[2]);
+
+  EXPECT_EQ(arraylist_size(list), 3);
+
+  EXPECT_TRUE(arraylist_contains(list, arr[1]));
+}
+
+TEST(ArrayList_Contains_ReturnsZero_IfItemNotInList, Basic) {
+  arraylist_t *list = arraylist_create(5);
+
+  void *arr[4];
+
+  auto a = &arr;
+
+  make_items(arr, 4);
+
+  arraylist_add(list, arr[0]);
+  arraylist_add(list, arr[1]);
+  arraylist_add(list, arr[2]);
+
+  EXPECT_EQ(arraylist_size(list), 3);
+
+  EXPECT_FALSE(arraylist_contains(list, arr[3]));
+}
+
+TEST(ArrayList_Set_ReturnsOldValueWhenReplaced, Basic) {
+  arraylist_t *list = arraylist_create(5);
+
+  void *arr[4];
+
+  auto a = &arr;
+
+  make_items(arr, 4);
+
+  arraylist_add(list, arr[0]);
+  arraylist_add(list, arr[1]);
+  arraylist_add(list, arr[2]);
+
+  EXPECT_EQ(arraylist_size(list), 3);
+
+  EXPECT_EQ(arraylist_set(list, 1, arr[3]), arr[1]);
+  EXPECT_EQ(list->data[1], arr[3]);
 }
 
 // TEST: arraylist empty after adding 1 then removing
