@@ -22,7 +22,7 @@ void arraylist_set(struct arraylist_t *list, uint32_t index, void *new_value) {}
 
 void *arraylist_remove(struct arraylist_t *list, uint32_t index) {}
 
-uint32_t arraylist_size(struct arraylist_t *list) {}
+uint32_t arraylist_size(struct arraylist_t *list) { return list->size; }
 
 int arraylist_contains(struct arraylist_t *list, void *item) {}
 
