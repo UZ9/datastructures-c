@@ -8,11 +8,25 @@ struct arraylist_t *arraylist_create(uint32_t initial_capacity) {
   struct arraylist_t *list =
       (struct arraylist_t *)calloc(1, sizeof(struct arraylist_t));
 
+  if (list == NULL) {
+    LOG_ERROR("arraylist_create: error allocating memory for arraylist");
+    return NULL;
+  }
+
   list->data = (void **)calloc(initial_capacity, sizeof(void *));
+
+  if (list->data == NULL) {
+    LOG_ERROR("arraylist_create: error allocating memory for arraylist initial "
+              "array");
+
+    free(list);
+    return NULL;
+  }
+
   list->size = 0;
 
   if (initial_capacity == 0) {
-    LOG_ERROR("arrayli_create: cannot have initial capacity 0, must be > 0");
+    LOG_ERROR("arraylist_create: cannot have initial capacity 0, must be > 0");
     free(list->data);
     free(list);
     return NULL;
@@ -41,26 +55,35 @@ void arraylist_add_at_index(struct arraylist_t *list, uint32_t index,
 
   if (index > list->size) {
     LOG_ERROR(
-        "arraylist_add_at_index: index %d out of bounds for list of size %d",
+        "arraylist_add_at_index: index %u out of bounds for list of size %u",
         index, list->size);
     return;
   }
 
   // check if at capacity
-  if (list->size + 1 == list->capacity) {
+  if (list->size == list->capacity) {
     // resize
     uint32_t new_capacity = list->capacity * 2;
 
     list->capacity = new_capacity;
 
+    void **temp = list->data;
+
     list->data = realloc(list->data, new_capacity * sizeof(void *));
+
+    if (list->data == NULL) {
+      LOG_ERROR("arraylist_add_at_index: errored when attempting to realloc "
+                "array to larger capacity");
+      list->capacity = list->capacity / 2;
+      list->data = temp;
+    }
   }
 
   // add to back
   if (index == list->size) {
     list->data[list->size++] = item;
   } else {
-    for (int i = list->size; i > index; i--) {
+    for (uint32_t i = list->size; i > index; i--) {
       list->data[i] = list->data[i - 1];
     }
 
@@ -77,7 +100,7 @@ void *arraylist_get(struct arraylist_t *list, uint32_t index) {
   }
 
   if (index >= list->size) {
-    LOG_ERROR("arraylist_get: index %d out of bounds for list of size %d",
+    LOG_ERROR("arraylist_get: index %u out of bounds for list of size %u",
               index, list->size);
     return NULL;
   }
@@ -92,7 +115,7 @@ void *arraylist_set(struct arraylist_t *list, uint32_t index, void *new_value) {
   }
 
   if (index >= list->size) {
-    LOG_ERROR("arraylist_get: index %d out of bounds for list of size %d",
+    LOG_ERROR("arraylist_set: index %u out of bounds for list of size %u",
               index, list->size);
     return NULL;
   }
@@ -109,7 +132,17 @@ void *arraylist_remove(struct arraylist_t *list, uint32_t index) {
     LOG_ERROR("arraylist_remove: null list provided");
     return NULL;
   }
-  // TODO: edge cases
+
+  if (index >= list->size) {
+    LOG_ERROR("arraylist_remove: index %u out of bounds for list of size %u",
+              index, list->size);
+    return NULL;
+  }
+
+  if (list->size == 0) {
+    LOG_ERROR("arraylist_remove: attempting to remove from empty list");
+    return NULL;
+  }
 
   void *removed = list->data[index];
 
