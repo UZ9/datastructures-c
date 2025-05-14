@@ -4,10 +4,16 @@ extern "C" {
 #include "arraylist.h"
 }
 
-TEST(HelloTest, Basic) {
-  EXPECT_STRNE("hello", "world");
+TEST(ArrayList_Create_HasSizeZero, Basic) {
+  arraylist_t *list = arraylist_create(10);
 
-  EXPECT_EQ(sum(1, 3), 4);
-
-  EXPECT_EQ(7 * 6, 42);
+  EXPECT_EQ(list->size, 0);
 }
+
+TEST(ArrayList_IsEmpty_ShouldBeTrueAfterInitialization, Basic) {
+  arraylist_t *list = arraylist_create(10);
+
+  EXPECT_TRUE(arraylist_is_empty(list));
+}
+
+// TEST: arraylist empty after adding 1 then removing
