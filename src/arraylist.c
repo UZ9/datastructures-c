@@ -1,4 +1,5 @@
 #include "arraylist.h"
+#include <stdio.h>
 #include <stdlib.h>
 
 struct arraylist_t *arraylist_create(uint32_t initial_capacity) {
@@ -14,6 +15,12 @@ struct arraylist_t *arraylist_create(uint32_t initial_capacity) {
 }
 
 void arraylist_add(struct arraylist_t *list, void *item) {
+  arraylist_add_at_index(list, list->size, item);
+}
+
+void arraylist_add_at_index(struct arraylist_t *list, uint32_t index,
+                            void *item) {
+
   // check if at capacity
   if (list->size + 1 == list->capacity) {
     // resize
@@ -24,11 +31,22 @@ void arraylist_add(struct arraylist_t *list, void *item) {
     list->data = realloc(list->data, new_capacity * sizeof(void *));
   }
 
-  list->data[list->size++] = item;
-}
+  // add to back
+  if (index == list->size) {
+    list->data[list->size++] = item;
+  } else {
+    // shuffle everything over
 
-void arraylist_add_at_index(struct arraylist_t *list, uint32_t index,
-                            void *item) {}
+    for (int i = list->size + 1; i > index; i--) {
+      printf("%d\n", i);
+      list->data[i] = list->data[i - 1];
+    }
+
+    list->data[index] = item;
+
+    list->size++;
+  }
+}
 
 void *arraylist_get(struct arraylist_t *list, uint32_t index) {}
 
