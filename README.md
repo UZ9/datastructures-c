@@ -1,6 +1,6 @@
 # datastructures-c
 
-Simple data structures in C.
+Simple data structures in C for my personal projects.
 
 *Note: these are by no means the fastest data structures imaginable. Implementations have a wide variety of optimizations depending on the task, and my task was simplicity.*
 
