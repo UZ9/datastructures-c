@@ -1,6 +1,6 @@
 add_executable(
   run_tests 
-  test_arraylist.cpp
+  test_hashmap.cpp
 )
 
 target_link_libraries(

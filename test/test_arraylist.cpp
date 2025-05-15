@@ -18,7 +18,7 @@ void make_items(void **arr, int count) {
   }
 }
 
-void clean_items(void **arr, int count) {
+static void clean_items(void **arr, int count) {
   for (int i = 0; i < count; i++) {
     // no heap allocatd items in dummy node, so just free
     free(arr[i]);
@@ -26,9 +26,9 @@ void clean_items(void **arr, int count) {
   }
 }
 
-void print_item(void *item) { printf("%d ", ((DummyNode *)item)->val); }
+static void print_item(void *item) { printf("%d ", ((DummyNode *)item)->val); }
 
-bool node_is_value(void *node, int value) {
+static bool node_is_value(void *node, int value) {
   return ((DummyNode *)node)->val == value;
 }
 
@@ -71,8 +71,6 @@ TEST(ArrayList_Add_NoResize, Basic) {
 
   void *arr[3];
 
-  auto a = &arr;
-
   make_items(arr, 3);
 
   EXPECT_TRUE(node_is_value(arr[0], 0));
@@ -98,8 +96,6 @@ TEST(ArrayList_Add_CanResize, Basic) {
 
   void *arr[3];
 
-  auto a = &arr;
-
   make_items(arr, 3);
 
   EXPECT_TRUE(node_is_value(arr[0], 0));
@@ -124,8 +120,6 @@ TEST(ArrayList_Add_InMiddle, Basic) {
   arraylist_t *list = arraylist_create(5);
 
   void *arr[4];
-
-  auto a = &arr;
 
   make_items(arr, 4);
 
@@ -158,8 +152,6 @@ TEST(ArrayList_Remove_InMiddle, Basic) {
 
   void *arr[4];
 
-  auto a = &arr;
-
   make_items(arr, 4);
 
   EXPECT_TRUE(node_is_value(arr[0], 0));
@@ -190,8 +182,6 @@ TEST(ArrayList_GetItem, Basic) {
 
   void *arr[4];
 
-  auto a = &arr;
-
   make_items(arr, 4);
 
   EXPECT_TRUE(node_is_value(arr[0], 0));
@@ -220,8 +210,6 @@ TEST(ArrayList_IndexOf_ReturnsNegativeOne_IfItemNotInList, Basic) {
 
   void *arr[4];
 
-  auto a = &arr;
-
   make_items(arr, 4);
 
   arraylist_add(list, arr[0]);
@@ -235,13 +223,10 @@ TEST(ArrayList_IndexOf_ReturnsNegativeOne_IfItemNotInList, Basic) {
   arraylist_destroy(list);
 }
 
-
 TEST(ArrayList_IndexOf_ReturnsCorrectIndex_IfItemInList, Basic) {
   arraylist_t *list = arraylist_create(5);
 
   void *arr[4];
-
-  auto a = &arr;
 
   make_items(arr, 4);
 
@@ -256,13 +241,10 @@ TEST(ArrayList_IndexOf_ReturnsCorrectIndex_IfItemInList, Basic) {
   arraylist_destroy(list);
 }
 
-
 TEST(ArrayList_Contains_ReturnsNonZero_IfItemInList, Basic) {
   arraylist_t *list = arraylist_create(5);
 
   void *arr[4];
-
-  auto a = &arr;
 
   make_items(arr, 4);
 
@@ -282,8 +264,6 @@ TEST(ArrayList_Contains_ReturnsZero_IfItemNotInList, Basic) {
 
   void *arr[4];
 
-  auto a = &arr;
-
   make_items(arr, 4);
 
   arraylist_add(list, arr[0]);
@@ -302,8 +282,6 @@ TEST(ArrayList_Set_ReturnsOldValueWhenReplaced, Basic) {
 
   void *arr[4];
 
-  auto a = &arr;
-
   make_items(arr, 4);
 
   arraylist_add(list, arr[0]);
@@ -317,7 +295,6 @@ TEST(ArrayList_Set_ReturnsOldValueWhenReplaced, Basic) {
   clean_items(arr, 4);
 
   arraylist_destroy(list);
-  
 }
 
 // TEST: arraylist empty after adding 1 then removing
